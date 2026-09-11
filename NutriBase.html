@@ -1078,40 +1078,8 @@
 
           <hr style="border: none; border-top: 1px solid var(--card-border); margin: 1.25rem 0;" />
 
-          <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <strong style="color: var(--text-heading); font-size: 1rem;" data-i18n="plan_title">Тарифный план: Free Member</strong>
-                <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.25rem;" data-i18n="plan_desc">Доступ ко всей базе нутриентов и дневному расчету КБЖУ</p>
-              </div>
-              <span class="brand-tag" data-i18n="plan_badge">Активен</span>
-            </div>
-          </div>
-
-          <h4 style="font-size: 1rem; margin-bottom: 0.85rem; color: var(--text-heading);" data-i18n="payment_title">Способы оплаты</h4>
-          <div id="cardsList" style="margin-bottom: 1.25rem;"></div>
-
-          <div style="background: var(--inner-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.35rem;">
-            <h5 style="margin-bottom: 0.85rem; color: var(--text-heading); font-size: 0.92rem;" data-i18n="link_card_title">Привязать карту для подписки</h5>
-            <div class="form-group">
-              <label for="cardNumInput" data-i18n="card_num_label">Номер карты:</label>
-              <input type="text" id="cardNumInput" class="form-control" placeholder="0000 0000 0000 0000" maxlength="19" />
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-              <div class="form-group">
-                <label for="cardExpInput" data-i18n="card_exp_label">Срок действия:</label>
-                <input type="text" id="cardExpInput" class="form-control" placeholder="ММ/ГГ" maxlength="5" />
-              </div>
-              <div class="form-group">
-                <label for="cardCvcInput" data-i18n="card_cvc_label">CVC:</label>
-                <input type="password" id="cardCvcInput" class="form-control" placeholder="•••" maxlength="3" />
-              </div>
-            </div>
-            <button class="btn" style="width: 100%;" data-i18n="card_save_btn" onclick="saveCard()">Сохранить способ оплаты</button>
-          </div>
-
           <!-- MEDICAL LAB ANALYSIS SECTION -->
-          <div class="panel" style="margin-top: 1.5rem;">
+          <div class="panel">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
               <div>
                 <h4 style="font-size: 1.15rem; color: var(--text-heading);" data-i18n="lab_title">📊 Медицинские анализы и маркеры</h4>
@@ -2471,52 +2439,9 @@
         if (userPanel) userPanel.style.display = 'block';
         const badge = document.getElementById('userEmailBadge');
         if (badge) badge.textContent = user;
-        loadCards();
       } else {
         if (authPanel) authPanel.style.display = 'block';
         if (userPanel) userPanel.style.display = 'none';
-      }
-    }
-
-    function saveCard() {
-      const num = (document.getElementById('cardNumInput').value || '').replace(/\s+/g, '');
-      if (num.length < 16) {
-        alert(currentLang === 'ro' ? 'Introduceți 16 cifre ale numărului de card' : (currentLang === 'en' ? 'Please enter 16 digits of your card' : 'Введите 16 цифр номера карты'));
-        return;
-      }
-      const mask = '•••• •••• •••• ' + num.slice(-4);
-      let cards = [];
-      try {
-        cards = JSON.parse(localStorage.getItem('nb_cards') || '[]');
-      } catch(e) {}
-      cards.push(mask);
-      try {
-        localStorage.setItem('nb_cards', JSON.stringify(cards));
-      } catch(e) {}
-      document.getElementById('cardNumInput').value = '';
-      alert(currentLang === 'ro' ? 'Cardul a fost salvat cu succes!' : (currentLang === 'en' ? 'Card linked successfully!' : 'Карта успешно сохранена!'));
-      loadCards();
-    }
-
-    function loadCards() {
-      let cards = [];
-      try {
-        cards = JSON.parse(localStorage.getItem('nb_cards') || '[]');
-      } catch(e) {}
-      const container = document.getElementById('cardsList');
-      if (!container) return;
-      const t = translations[currentLang] || translations.ru;
-      if (cards.length === 0) {
-        container.innerHTML = '<p style="font-size: 0.85rem; color: var(--text-muted);">' + (t.cards_empty || 'Сохраненных карт пока нет.') + '</p>';
-      } else {
-        container.innerHTML = cards.map(c => {
-          return (
-            '<div style="background: var(--inner-bg); border: 1px solid var(--card-border); padding: 0.75rem 1rem; border-radius: 8px; font-family: var(--font-mono); font-size: 0.86rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">' +
-              '<span>💳 ' + c + '</span>' +
-              '<span style="color: var(--primary); font-size: 0.75rem; font-weight: 700;">' + (t.cards_active || 'Активна') + '</span>' +
-            '</div>'
-          );
-        }).join('');
       }
     }
 
@@ -2633,16 +2558,12 @@
       const revTextInp = document.getElementById('revText');
       if (revTextInp) revTextInp.placeholder = currentLang === 'ro' ? 'Descrieți doza, durata administrării și starea generală...' : (currentLang === 'en' ? 'Describe dosage, course duration and well-being...' : 'Опишите дозировку, длительность курса и самочувствие...');
 
-      const cardExpInp = document.getElementById('cardExpInput');
-      if (cardExpInp) cardExpInp.placeholder = currentLang === 'ro' ? 'LL/AA' : (currentLang === 'en' ? 'MM/YY' : 'ММ/ГГ');
-
       // 9. Re-render dynamic lists & grids
       filterSupplements();
       filterSports();
       updateFoodPreview();
       renderDiary();
       renderAnalysesList();
-      loadCards();
     }
 
     /* Theme Switcher Logic */
