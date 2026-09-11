@@ -936,9 +936,13 @@
         </div>
       </div>
 
-      <!-- Add Food Form -->
       <div class="panel" style="margin-bottom: 1.75rem;">
-        <h3 style="margin-bottom: 1.15rem; font-size: 1.15rem; color: var(--text-heading);" data-i18n="diary_add_title">Добавить продукт в рацион</h3>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.15rem; flex-wrap: wrap; gap: 0.75rem;">
+          <h3 style="margin-bottom: 0; font-size: 1.15rem; color: var(--text-heading);" data-i18n="diary_add_title">Добавить продукт в рацион</h3>
+          <button class="btn" type="button" style="font-size: 0.84rem; padding: 0.4rem 0.85rem; height: auto;" onclick="openCustomFoodModal()">
+            <span data-i18n="custom_food_btn">✨ Создать свой продукт</span>
+          </button>
+        </div>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; align-items: flex-end;">
           
           <div class="form-group" style="margin-bottom: 0;">
@@ -1213,6 +1217,59 @@
     </div>
   </div>
 
+  <!-- MODAL FOR ADDING CUSTOM FOOD -->
+  <div id="customFoodModal" class="modal-backdrop">
+    <div class="modal-box" style="max-width: 540px;">
+      <div class="modal-header">
+        <div>
+          <h3 style="font-size: 1.15rem;" data-i18n="custom_food_modal_title">Создать свой продукт</h3>
+          <span style="font-size: 0.82rem; color: #34d399;" data-i18n="custom_food_modal_sub">Добавление в персональную базу КБЖУ</span>
+        </div>
+        <button class="close-btn" onclick="closeCustomFoodModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="customFoodForm" onsubmit="event.preventDefault(); saveCustomFood();">
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label for="cfName" style="font-size: 0.88rem;" data-i18n="cf_name_label">Название продукта / блюда:</label>
+            <input type="text" id="cfName" class="form-control" required placeholder="напр. Домашний сырник, протеиновый омлет..." data-i18n-ph="cf_name_ph" autocomplete="off" />
+          </div>
+
+          <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.65rem; font-weight: 600;" data-i18n="cf_macros_notice">
+            Пищевая ценность (на 100 грамм):
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="cfCal" style="font-size: 0.82rem;" data-i18n="cf_cal_label">Калории (ккал):</label>
+              <input type="number" id="cfCal" class="form-control" required min="0" max="1000" step="1" placeholder="250" />
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="cfP" style="font-size: 0.82rem;" data-i18n="cf_p_label">Белки (г):</label>
+              <input type="number" id="cfP" class="form-control" required min="0" max="100" step="0.1" placeholder="20.0" />
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="cfF" style="font-size: 0.82rem;" data-i18n="cf_f_label">Жиры (г):</label>
+              <input type="number" id="cfF" class="form-control" required min="0" max="100" step="0.1" placeholder="5.0" />
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="cfC" style="font-size: 0.82rem;" data-i18n="cf_c_label">Углеводы (г):</label>
+              <input type="number" id="cfC" class="form-control" required min="0" max="100" step="0.1" placeholder="30.0" />
+            </div>
+          </div>
+
+          <button type="submit" class="btn" style="width: 100%; padding: 0.75rem; font-size: 0.92rem;">
+            <span data-i18n="cf_save_btn">💾 Сохранить продукт в базу</span>
+          </button>
+        </form>
+
+        <div id="customFoodsListSection" style="margin-top: 1.5rem; border-top: 1px solid var(--card-border); padding-top: 1rem;">
+          <h4 style="font-size: 0.92rem; margin-bottom: 0.75rem; color: var(--text-heading);" data-i18n="cf_list_title">Ваши сохраненные продукты:</h4>
+          <div id="customFoodsList" style="max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer>
     <p data-i18n="footer_text">NutriBase &bull; Научно-исследовательский портал доказательной биомедицины и спортивной нутрициологии.</p>
   </footer>
@@ -1285,6 +1342,24 @@
         diary_empty: "В этот день записей пока нет. Выберите продукт выше и добавьте в рацион.",
         diary_confirm_clear: "Очистить все записи за выбранный день?",
         diary_delete_btn: "Удалить запись",
+
+        custom_food_btn: "✨ Создать свой продукт",
+        custom_food_modal_title: "Создать свой продукт",
+        custom_food_modal_sub: "Добавление в персональную базу КБЖУ",
+        cf_name_label: "Название продукта / блюда:",
+        cf_name_ph: "напр. Домашний сырник, протеиновый омлет...",
+        cf_macros_notice: "Пищевая ценность (на 100 грамм):",
+        cf_cal_label: "Калории (ккал):",
+        cf_p_label: "Белки (г):",
+        cf_f_label: "Жиры (г):",
+        cf_c_label: "Углеводы (г):",
+        cf_save_btn: "💾 Сохранить продукт в базу",
+        cf_list_title: "Ваши сохраненные продукты:",
+        cf_empty_list: "У вас пока нет сохраненных своих продуктов. Заполните форму выше.",
+        cf_err_name: "Пожалуйста, укажите название продукта!",
+        cf_err_cal: "Пожалуйста, укажите корректную калорийность!",
+        cf_success: "Продукт успешно сохранен и добавлен в базу!",
+        cf_confirm_del: "Удалить этот продукт из вашей базы?",
 
         calc_h2: "Научные калькуляторы дозировок",
         calc_p: "Расчет индивидуальных суточных норм нутриентов и физиологических индексов на базе международных протоколов ISSN и ВОЗ.",
@@ -1410,6 +1485,24 @@
         diary_confirm_clear: "Goliți toate înregistrările pentru ziua selectată?",
         diary_delete_btn: "Șterge înregistrarea",
 
+        custom_food_btn: "✨ Creează produs propriu",
+        custom_food_modal_title: "Creează un produs propriu",
+        custom_food_modal_sub: "Adăugare în baza personală de calorii și macronutrienți",
+        cf_name_label: "Denumirea produsului / preparatului:",
+        cf_name_ph: "ex. Clătite de casă, supă cremă, budincă proteică...",
+        cf_macros_notice: "Valoare nutrițională (per 100 grame):",
+        cf_cal_label: "Calorii (kcal):",
+        cf_p_label: "Proteine (g):",
+        cf_f_label: "Grăsimi (g):",
+        cf_c_label: "Carbohidrați (g):",
+        cf_save_btn: "💾 Salvează produsul în bază",
+        cf_list_title: "Produsele tale salvate:",
+        cf_empty_list: "Nu aveți încă produse proprii. Completați formularul de mai sus.",
+        cf_err_name: "Vă rugăm să introduceți denumirea produsului!",
+        cf_err_cal: "Vă rugăm să introduceți o valoare validă a caloriilor!",
+        cf_success: "Produsul a fost salvat și adăugat în listă!",
+        cf_confirm_del: "Doriți să ștergeți acest produs din baza dumneavoastră?",
+
         calc_h2: "Calculatoare științifice de dozaj",
         calc_p: "Calculul normelor zilnice individuale bazat pe protocoalele internaționale ISSN și OMS.",
         bmi_calc_title: "Calculator indice de masă corporală (IMC / BMI)",
@@ -1533,6 +1626,24 @@
         diary_empty: "No records for this day. Select a food item above and add it to your diet.",
         diary_confirm_clear: "Clear all records for this day?",
         diary_delete_btn: "Delete entry",
+
+        custom_food_btn: "✨ Add Custom Food",
+        custom_food_modal_title: "Create Custom Food",
+        custom_food_modal_sub: "Add item to your personal macro database",
+        cf_name_label: "Food / meal name:",
+        cf_name_ph: "e.g. Homemade protein pancake, grandma soup...",
+        cf_macros_notice: "Nutritional values (per 100 grams):",
+        cf_cal_label: "Calories (kcal):",
+        cf_p_label: "Protein (g):",
+        cf_f_label: "Fat (g):",
+        cf_c_label: "Carbs (g):",
+        cf_save_btn: "💾 Save food to database",
+        cf_list_title: "Your custom saved foods:",
+        cf_empty_list: "You have no custom foods yet. Fill out the form above.",
+        cf_err_name: "Please enter the product name!",
+        cf_err_cal: "Please provide valid calories!",
+        cf_success: "Food item saved successfully and added to list!",
+        cf_confirm_del: "Delete this custom food from database?",
 
         calc_h2: "Scientific Dosage Calculators",
         calc_p: "Individual nutrient dosing protocols based on international ISSN and WHO clinical guidelines.",
@@ -1850,6 +1961,139 @@
       if (counterEl) counterEl.textContent = (t.sports_counter || 'Доступно в реестре: ') + filtered.length;
     }
 
+    function getCustomFoods() {
+      try {
+        const stored = localStorage.getItem('nb_custom_foods');
+        if (stored) return JSON.parse(stored);
+      } catch(e) {}
+      return [];
+    }
+
+    function saveCustomFoods(list) {
+      try {
+        localStorage.setItem('nb_custom_foods', JSON.stringify(list));
+      } catch(e) {}
+    }
+
+    function getAllFoods() {
+      const custom = getCustomFoods();
+      return [...custom, ...foodsDatabase];
+    }
+
+    function openCustomFoodModal() {
+      renderCustomFoodsList();
+      const modal = document.getElementById('customFoodModal');
+      if (modal) modal.classList.add('open');
+    }
+
+    function closeCustomFoodModal() {
+      const modal = document.getElementById('customFoodModal');
+      if (modal) modal.classList.remove('open');
+    }
+
+    function saveCustomFood() {
+      const nameInp = document.getElementById('cfName');
+      const calInp = document.getElementById('cfCal');
+      const pInp = document.getElementById('cfP');
+      const fInp = document.getElementById('cfF');
+      const cInp = document.getElementById('cfC');
+      const t = translations[currentLang] || translations.ru;
+
+      const name = nameInp ? nameInp.value.trim() : '';
+      const cal = calInp ? Math.round(parseFloat(calInp.value)) : 0;
+      const p = pInp ? parseFloat(parseFloat(pInp.value).toFixed(1)) : 0;
+      const fat = fInp ? parseFloat(parseFloat(fInp.value).toFixed(1)) : 0;
+      const carb = cInp ? parseFloat(parseFloat(cInp.value).toFixed(1)) : 0;
+
+      if (!name) {
+        alert(t.cf_err_name || 'Пожалуйста, укажите название продукта!');
+        return;
+      }
+      if (isNaN(cal) || cal < 0) {
+        alert(t.cf_err_cal || 'Пожалуйста, укажите корректную калорийность!');
+        return;
+      }
+
+      const newFood = {
+        id: Date.now(),
+        name: name,
+        name_ru: name,
+        name_ro: name,
+        name_en: name,
+        cat: 'custom',
+        cat_ru: 'Мои продукты',
+        cat_ro: 'Produsele mele',
+        cat_en: 'My Custom Foods',
+        cal: cal,
+        p: isNaN(p) ? 0 : p,
+        f: isNaN(fat) ? 0 : fat,
+        c: isNaN(carb) ? 0 : carb,
+        isCustom: true
+      };
+
+      const customList = getCustomFoods();
+      customList.unshift(newFood);
+      saveCustomFoods(customList);
+
+      if (nameInp) nameInp.value = '';
+      if (calInp) calInp.value = '';
+      if (pInp) pInp.value = '';
+      if (fInp) fInp.value = '';
+      if (cInp) cInp.value = '';
+
+      renderCustomFoodsList();
+      filterFoodOptions();
+
+      const foodSel = document.getElementById('foodSelect');
+      if (foodSel) {
+        foodSel.value = newFood.id;
+        updateFoodPreview();
+      }
+
+      closeCustomFoodModal();
+      alert(t.cf_success || 'Продукт успешно сохранен и добавлен в базу!');
+    }
+
+    function deleteCustomFood(id) {
+      const t = translations[currentLang] || translations.ru;
+      if (!confirm(t.cf_confirm_del || 'Удалить этот продукт из вашей базы?')) return;
+      let customList = getCustomFoods();
+      customList = customList.filter(f => f.id !== id);
+      saveCustomFoods(customList);
+      renderCustomFoodsList();
+      filterFoodOptions();
+    }
+
+    function renderCustomFoodsList() {
+      const listEl = document.getElementById('customFoodsList');
+      if (!listEl) return;
+      const custom = getCustomFoods();
+      const t = translations[currentLang] || translations.ru;
+      const calLabel = currentLang === 'ru' ? 'ккал' : 'kcal';
+      const pLabel = currentLang === 'ru' ? 'Б' : 'P';
+      const fLabel = currentLang === 'ru' ? 'Ж' : (currentLang === 'ro' ? 'G' : 'F');
+      const cLabel = currentLang === 'ru' ? 'У' : 'C';
+
+      if (custom.length === 0) {
+        listEl.innerHTML = '<p style="font-size: 0.82rem; color: var(--text-muted); text-align: center; margin: 0.5rem 0;">' + (t.cf_empty_list || 'У вас пока нет сохраненных своих продуктов.') + '</p>';
+        return;
+      }
+
+      listEl.innerHTML = custom.map(item => {
+        return (
+          '<div style="display: flex; justify-content: space-between; align-items: center; background: var(--inner-bg); border: 1px solid var(--card-border); padding: 0.6rem 0.85rem; border-radius: 8px;">' +
+            '<div>' +
+              '<strong style="font-size: 0.88rem; color: var(--text-heading); display: block;">⭐ ' + item.name + '</strong>' +
+              '<span style="font-size: 0.78rem; color: var(--text-muted);">' +
+                item.cal + ' ' + calLabel + ' | ' + pLabel + ':' + item.p + ' | ' + fLabel + ':' + item.f + ' | ' + cLabel + ':' + item.c + ' (на 100г)' +
+              '</span>' +
+            '</div>' +
+            '<button class="delete-item-btn" title="' + (t.diary_delete_btn || 'Удалить') + '" onclick="deleteCustomFood(' + item.id + ')">🗑️</button>' +
+          '</div>'
+        );
+      }).join('');
+    }
+
     function filterFoodOptions() {
       const foodSel = document.getElementById('foodSelect');
       if (!foodSel) return;
@@ -1863,9 +2107,10 @@
 
       const prevSelectedId = foodSel.value ? parseInt(foodSel.value, 10) : null;
 
-      let matched = foodsDatabase;
+      const allFoods = getAllFoods();
+      let matched = allFoods;
       if (q) {
-        matched = foodsDatabase.filter(f => {
+        matched = allFoods.filter(f => {
           const names = [
             f.name, f.name_ru, f.name_ro, f.name_en,
             f.cat, f.cat_ru, f.cat_ro, f.cat_en
@@ -1880,7 +2125,8 @@
       } else {
         foodSel.innerHTML = matched.map(f => {
           const fname = lang === 'ro' ? (f.name_ro || f.name) : (lang === 'en' ? (f.name_en || f.name) : (f.name_ru || f.name));
-          return '<option value="' + f.id + '">' + fname + ' [' + f.cal + ' ' + calLabel + ', ' + pLabel + ':' + f.p + ' ' + fLabel + ':' + f.f + ' ' + cLabel + ':' + f.c + ']</option>';
+          const prefix = f.isCustom ? '⭐ ' : '';
+          return '<option value="' + f.id + '">' + prefix + fname + ' [' + f.cal + ' ' + calLabel + ', ' + pLabel + ':' + f.p + ' ' + fLabel + ':' + f.f + ' ' + cLabel + ':' + f.c + ']</option>';
         }).join('');
 
         if (prevSelectedId && matched.some(f => f.id === prevSelectedId)) {
@@ -1957,7 +2203,7 @@
       if (!sel) return;
       const id = parseInt(sel.value, 10);
       const w = parseFloat(document.getElementById('foodWeight').value) || 100;
-      const f = foodsDatabase.find(item => item.id === id);
+      const f = getAllFoods().find(item => item.id === id);
       if (!f) return;
 
       const factor = w / 100.0;
@@ -2026,9 +2272,10 @@
 
           let displayName = item.name;
           if (item.foodId) {
-            const foundFood = foodsDatabase.find(f => f.id === item.foodId);
+            const foundFood = getAllFoods().find(f => f.id === item.foodId);
             if (foundFood) {
-              displayName = currentLang === 'ro' ? (foundFood.name_ro || foundFood.name) : (currentLang === 'en' ? (foundFood.name_en || foundFood.name) : (foundFood.name_ru || foundFood.name));
+              const baseName = currentLang === 'ro' ? (foundFood.name_ro || foundFood.name) : (currentLang === 'en' ? (foundFood.name_en || foundFood.name) : (foundFood.name_ru || foundFood.name));
+              displayName = (foundFood.isCustom ? '⭐ ' : '') + baseName;
             }
           }
 
@@ -2081,7 +2328,7 @@
       const w = parseFloat(document.getElementById('foodWeight').value) || 100;
       const meal = document.getElementById('mealType').value;
 
-      const f = foodsDatabase.find(item => item.id === id);
+      const f = getAllFoods().find(item => item.id === id);
       if (!f) return;
 
       const factor = w / 100.0;
@@ -2615,6 +2862,7 @@
       filterSports();
       updateFoodPreview();
       renderDiary();
+      renderCustomFoodsList();
       renderAnalysesList();
     }
 
@@ -2789,7 +3037,14 @@
       try { updateDropdownOptions(currentLang); } catch(e) { console.error('updateDropdownOptions error:', e); }
       try { updateFoodPreview(); } catch(e) { console.error('updateFoodPreview error:', e); }
       try { renderDiary(); } catch(e) { console.error('renderDiary error:', e); }
+      try { renderCustomFoodsList(); } catch(e) { console.error('renderCustomFoodsList error:', e); }
       try { checkAuth(); } catch(e) { console.error('checkAuth error:', e); }
+    });
+
+    window.addEventListener('click', (e) => {
+      if (e.target && e.target.classList && e.target.classList.contains('modal-backdrop')) {
+        e.target.classList.remove('open');
+      }
     });
     </script>
 </body>
