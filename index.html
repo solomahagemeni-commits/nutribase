@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -870,10 +870,10 @@
     </div>
     <div style="display: flex; align-items: center; gap: 0.75rem;">
       <select id="langSelect" class="date-btn" onchange="changeLanguage(this.value)" style="padding: 0.5rem 0.75rem; border-radius: 9px; cursor: pointer; outline: none; font-weight: 700; font-size: 0.82rem;">
-        <option value="ru">🇷🇺 Русский</option>
-        <option value="ro">🇲🇩 Română</option>
-        <option value="en">🇬🇧 English</option>
-      </select>
+            <option value="en" selected>🇬🇧 EN</option>
+            <option value="ru">🇷🇺 RU</option>
+            <option value="ro">🇲🇩 RO</option>
+          </select>
       <button id="themeToggleBtn" onclick="toggleTheme()" class="date-btn" style="display: flex; align-items: center; gap: 5px; font-size: 0.85rem; padding: 0.5rem 0.85rem; border-radius: 9px;">
         <span id="themeIcon">☀️</span> <span id="themeLabel">Светлая</span>
       </button>
@@ -1850,7 +1850,7 @@
       { val: "1", ru: "⭐ (1 - Не подошло)", ro: "⭐ (1 - Nu mi s-a potrivit)", en: "⭐ (1 - Ineffective / Disliked)" }
     ];
 
-    let currentLang = 'ru';
+    let currentLang = 'en';
     let activeReviewItemKey = null;
     let activeReviewItemName = null;
     let activeDosageItem = null;
@@ -1995,7 +1995,7 @@
     }
 
     function updateCategoryChips(lang) {
-      const l = lang || currentLang || 'ru';
+      const l = lang || currentLang || 'en';
       document.querySelectorAll('#suppFilterChips .chip-btn').forEach(btn => {
         const k = btn.getAttribute('data-filter') || '';
         if (chipTranslations[k] && chipTranslations[k][l]) {
@@ -2259,7 +2259,7 @@
       if (!foodSel) return;
       const searchInp = document.getElementById('foodSearch');
       const q = (searchInp ? searchInp.value : '').trim().toLowerCase();
-      const lang = currentLang || 'ru';
+      const lang = currentLang || 'en';
       const calLabel = lang === 'ro' ? 'kcal' : (lang === 'en' ? 'kcal' : 'ккал');
       const pLabel = lang === 'ro' ? 'P' : (lang === 'en' ? 'P' : 'Б');
       const fLabel = lang === 'ro' ? 'G' : (lang === 'en' ? 'F' : 'Ж');
@@ -2308,7 +2308,7 @@
       if (mealSel) {
         const curVal = mealSel.value;
         mealSel.innerHTML = mealTypeDefinitions.map(m => {
-          return '<option value="' + m.val + '">' + (m[lang] || m.ru) + '</option>';
+          return '<option value="' + m.val + '">' + (m[lang] || m.en) + '</option>';
         }).join('');
         if (curVal) mealSel.value = curVal;
       }
@@ -2318,7 +2318,7 @@
       if (calcSel) {
         const curVal = calcSel.value;
         calcSel.innerHTML = calcItemDefinitions.map(c => {
-          return '<option value="' + c.val + '">' + (c[lang] || c.ru) + '</option>';
+          return '<option value="' + c.val + '">' + (c[lang] || c.en) + '</option>';
         }).join('');
         if (curVal) calcSel.value = curVal;
       }
@@ -2328,7 +2328,7 @@
       if (bioSel) {
         const curVal = bioSel.value;
         bioSel.innerHTML = biomarkerDefinitions.map(b => {
-          return '<option value="' + b.val + '">' + (b[lang] || b.ru) + '</option>';
+          return '<option value="' + b.val + '">' + (b[lang] || b.en) + '</option>';
         }).join('');
         if (curVal) bioSel.value = curVal;
       }
@@ -2338,7 +2338,7 @@
       if (goalSel) {
         const curVal = goalSel.value;
         goalSel.innerHTML = modalGoalDefinitions.map(g => {
-          return '<option value="' + g.val + '">' + (g[lang] || g.ru) + '</option>';
+          return '<option value="' + g.val + '">' + (g[lang] || g.en) + '</option>';
         }).join('');
         if (curVal) goalSel.value = curVal;
       }
@@ -2348,7 +2348,7 @@
       if (rateSel) {
         const curVal = rateSel.value;
         rateSel.innerHTML = ratingDefinitions.map(r => {
-          return '<option value="' + r.val + '">' + (r[lang] || r.ru) + '</option>';
+          return '<option value="' + r.val + '">' + (r[lang] || r.en) + '</option>';
         }).join('');
         if (curVal) rateSel.value = curVal;
       }
@@ -2898,9 +2898,9 @@
 
     /* Multi-Language (i18n) Engine */
     function initLanguage() {
-      let saved = 'ru';
+      let saved = 'en';
       try {
-        saved = localStorage.getItem('nb_lang') || 'ru';
+        saved = localStorage.getItem('nb_lang') || 'en';
       } catch(e) {}
       const sel = document.getElementById('langSelect');
       if (sel) sel.value = saved;
@@ -2912,8 +2912,8 @@
     }
 
     function applyLanguage(lang) {
-      currentLang = lang || 'ru';
-      const t = translations[currentLang] || translations.ru;
+      currentLang = lang || 'en';
+      const t = translations[currentLang] || translations.en;
 
       try {
         localStorage.setItem('nb_lang', currentLang);
